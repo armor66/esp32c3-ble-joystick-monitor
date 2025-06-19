@@ -1,0 +1,19 @@
+# Mirrors the GitHub pipeline: lint the Python monitor, build the firmware.
+stages: [lint, build]
+
+python-lint:
+  stage: lint
+  image: python:3.11-slim
+  script:
+    - pip install ruff==0.15.4
+    - ruff check python-code/
+    - ruff format --check python-code/
+
+firmware-build:
+  stage: build
+  image: espressif/idf:v5.4.1
+  before_script:
+    - . "$IDF_PATH/export.sh"
+  script:
+    - cd microcontroller-code
+    - idf.py build
