@@ -4,6 +4,7 @@
 #include "driver/gpio.h"
 #include "driver/spi_master.h"
 #include "esp_log.h"
+#include "font8x8_basic.h"
 
 #define PIN_NUM_MOSI 4
 #define PIN_NUM_CLK 5
@@ -13,7 +14,7 @@
 
 spi_device_handle_t spi;
 
-extern const uint8_t font8x8_basic[128][8] = {
+/*extern const uint8_t font8x8_basic[128][8] = {
     ['H'] = {0b10000010, 0b10000010, 0b10000010, 0b11111110, 0b10000010, 0b10000010, 0b10000010, 0b00000000},
     ['E'] = {0b11111110, 0b10000000, 0b10000000, 0b11111110, 0b10000000, 0b10000000, 0b11111110, 0b00000000},
     ['L'] = {0b10000000, 0b10000000, 0b10000000, 0b10000000, 0b10000000, 0b10000000, 0b11111110, 0b00000000},
@@ -39,6 +40,7 @@ extern const uint8_t font8x8_basic[128][8] = {
     ['+'] = {0b00010000, 0b00010000, 0b00010000, 0b11111110, 0b00010000, 0b00010000, 0b00010000, 0b00000000},
     [':'] = {0b00000000, 0b00000000, 0b00010000, 0b00000000, 0b00010000, 0b00000000, 0b00000000, 0b00000000},
     ['S'] = {0b00111100, 0b01000010, 0b10000000, 0b01111100, 0b00000010, 0b10000010, 0b01111100, 0b00000000}};
+*/
 static void lcd_send_cmd(uint8_t cmd)
 {
     gpio_set_level(PIN_NUM_DC, 0);
@@ -155,7 +157,7 @@ static void lcd_draw_char_fast(uint8_t ch, int x, int y, uint16_t fg_color, uint
         return;
     if (x + 7 >= LCD_WIDTH || y + 7 >= LCD_HEIGHT)
         return;
-    const uint8_t *glyph = font8x8_basic[ch];
+    const uint8_t *glyph = font8x8_basic_tr[ch];
     uint8_t buffer[64 * 2];
     int index = 0;
     for (int row = 0; row < 8; row++)
