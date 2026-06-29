@@ -6,11 +6,8 @@
 #include "driver/gpio.h"
 #include "esp_log.h"
 
-// #define X_1 0
-// #define Y_1 1
-// #define SW_1 9
-// #define X_2 3
-// #define Y_2 2
+#define SW_1 9
+// #define X_1 0 // #define Y_1 1 // #define X_2 3 // #define Y_2 2
 //GPIO0...GPIO3 => ADC1_0...ADC1_3
 
 #define ADC_ATTEN           ADC_ATTEN_DB_12
@@ -20,10 +17,9 @@ const static char *TAG1 = "Calib";
 // static int adc_raw[4][10];
 static int voltage[4][10];
 static bool adc_calibration_init(adc_unit_t unit, adc_channel_t channel, adc_atten_t atten, adc_cali_handle_t *out_handle);
-static void adc_calibration_deinit(adc_cali_handle_t handle);
+// static void adc_calibration_deinit(adc_cali_handle_t handle);
 
 adc_oneshot_unit_handle_t adc1_handle;
-adc_cali_handle_t handle = NULL;
 
 adc_cali_handle_t adc1_cali_chan0_handle = NULL;
 adc_cali_handle_t adc1_cali_chan1_handle = NULL;
@@ -65,13 +61,12 @@ void input_init(void) {
 //    adc1_config_channel_atten(X_2, ADC_ATTEN_DB_11);
 //    adc1_config_channel_atten(Y_2, ADC_ATTEN_DB_11);
 
-//    gpio_config_t io_conf = {
-//        .pin_bit_mask = (1ULL << SW_1),
-//        .mode = GPIO_MODE_INPUT,
-//    };
-//    gpio_config(&io_conf);
-//    gpio_pullup_en(SW_1);
-
+   gpio_config_t io_conf = {
+       .pin_bit_mask = (1ULL << SW_1),
+       .mode = GPIO_MODE_INPUT,
+   };
+   gpio_config(&io_conf);
+   gpio_pullup_en(SW_1);
 }
 
 JoystickData input_read(void) {
@@ -101,7 +96,7 @@ JoystickData input_read(void) {
             ESP_LOGI(TAG0, "ADC%d Channel[%d] Cali Voltage: %d mV", ADC_UNIT_1 + 1, 2, voltage[2][0]);
         }
         if (do_calibration1_chan3) {
-            ESP_ERROR_CHECK(adc_cali_raw_to_voltage(adc1_cali_chan3_handle, raw_val03, &voltage[3][0]));
+            ESP_ERROR_CHECK(adc_cali_raw_to_voltage(adc1_cali_chan3_handle, raw_val3, &voltage[3][0]));
             ESP_LOGI(TAG0, "ADC%d Channel[%d] Cali Voltage: %d mV", ADC_UNIT_1 + 1, 3, voltage[3][0]);
         }
 
@@ -119,7 +114,7 @@ JoystickData input_read(void) {
 ---------------------------------------------------------------*/
 static bool adc_calibration_init(adc_unit_t unit, adc_channel_t channel, adc_atten_t atten, adc_cali_handle_t *out_handle)
 {
-    // adc_cali_handle_t handle = NULL;
+    adc_cali_handle_t handle = NULL;
     esp_err_t ret = ESP_FAIL;
     bool calibrated = false;
 
@@ -166,14 +161,14 @@ static bool adc_calibration_init(adc_unit_t unit, adc_channel_t channel, adc_att
     return calibrated;
 }
 
-static void adc_calibration_deinit(adc_cali_handle_t handle)
-{
-#if ADC_CALI_SCHEME_CURVE_FITTING_SUPPORTED
-    ESP_LOGI(TAG1, "deregister %s calibration scheme", "Curve Fitting");
-    ESP_ERROR_CHECK(adc_cali_delete_scheme_curve_fitting(handle));
+// static void adc_calibration_deinit(adc_cali_handle_t handle)
+// {
+// #if ADC_CALI_SCHEME_CURVE_FITTING_SUPPORTED
+//     ESP_LOGI(TAG1, "deregister %s calibration scheme", "Curve Fitting");
+//     ESP_ERROR_CHECK(adc_cali_delete_scheme_curve_fitting(handle));
 
-#elif ADC_CALI_SCHEME_LINE_FITTING_SUPPORTED
-    ESP_LOGI(TAG1, "deregister %s calibration scheme", "Line Fitting");
-    ESP_ERROR_CHECK(adc_cali_delete_scheme_line_fitting(handle));
-#endif
-}
+// #elif ADC_CALI_SCHEME_LINE_FITTING_SUPPORTED
+//     ESP_LOGI(TAG1, "deregister %s calibration scheme", "Line Fitting");
+//     ESP_ERROR_CHECK(adc_cali_delete_scheme_line_fitting(handle));
+// #endif
+// }

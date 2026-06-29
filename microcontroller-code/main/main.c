@@ -112,7 +112,8 @@ void app_main() {
 
         lcd_draw_point_in_square(point2_x, point2_y, 0x0000); // clear
         update_point_position(data.x2, data.y2, 120, 75, square_size, true, &point2_x, &point2_y);
-        lcd_draw_point_in_square(point2_x, point2_y, 0x07E0);
+        point_color = (data.sw1 == 0) ? 0x06db : 0xf80c;
+        lcd_draw_point_in_square(point2_x, point2_y, point_color);  //0x07E0);
 
         vTaskDelay(pdMS_TO_TICKS(20));
     }
