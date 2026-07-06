@@ -10,8 +10,8 @@ real time — numbers plus a moving dot in a box for each joystick.
 
 The firmware is split into small modules — `input` (ADC), `ble` (NimBLE GATT),
 `lcd` (from-scratch ST7735S driver) and `main` (the glue loop).
-Deprecated legacy `ADC driver` has been replaced whith new components/functions.
 Common `ST7735` do not need color inversion and change RGB order.
+Deprecated legacy `ADC driver` has been replaced whith new components/functions.
 
 ---
 
