@@ -1,6 +1,5 @@
 # ESP32-C3 Dual-Joystick BLE Monitor
 
-;[![CI](https://github.com/ArseniAliakseichyk/esp32c3-ble-joystick-monitor/actions/workflows/ci.yml/badge.svg)](https://github.com/ArseniAliakseichyk/esp32c3-ble-joystick-monitor/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![ESP-IDF](https://img.shields.io/badge/ESP--IDF-v6.01-blue.svg)](https://docs.espressif.com/projects/esp-idf/en/v5.4/)
 
@@ -11,8 +10,8 @@ real time — numbers plus a moving dot in a box for each joystick.
 
 The firmware is split into small modules — `input` (ADC), `ble` (NimBLE GATT),
 `lcd` (from-scratch ST7735S driver) and `main` (the glue loop).
-Deprecated legacy 'ADC driver' has been replaced whith new components/functions.
-Common 'ST7735' do not need color inversion and change RGB order.
+Deprecated legacy `ADC driver` has been replaced whith new components/functions.
+Common `ST7735` do not need color inversion and change RGB order.
 
 ---
 
